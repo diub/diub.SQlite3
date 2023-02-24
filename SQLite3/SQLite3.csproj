@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{06E0B9A7-4475-4594-9C79-CCD208909B8F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>diub.Database</RootNamespace>
+    <AssemblyName>diub.SQLite3</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>false</Deterministic>
+    <BasePath>Y:\VS\$(AssemblyName)</BasePath>
+    <BaseIntermediateOutputPath>$(BasePath)\obj\</BaseIntermediateOutputPath>
+    <OutputPath>$(BasePath)\bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG;CLEANCODE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;CLEANCODE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataTable\InsertDataTable.cs" />
+    <Compile Include="Firm\AnsiString.cs" />
+    <Compile Include="Firm\ConfigOption.cs" />
+    <Compile Include="Firm\ExtendedResult.cs" />
+    <Compile Include="Firm\Firm.cs" />
+    <Compile Include="Firm\OpenFlags.cs" />
+    <Compile Include="Firm\Raw.cs" />
+    <Compile Include="Firm\SQLiteResult.cs" />
+    <Compile Include="Firm\SQLiteTypeClasses.cs" />
+    <Compile Include="Firm\SQLiteTypes.cs" />
+    <Compile Include="Globals-SQLite3.cs" />
+    <Compile Include="Helper\CompareSchema.cs" />
+    <Compile Include="Helper\Creator.cs" />
+    <Compile Include="Helper\DataTable.cs" />
+    <Compile Include="Helper\GetFieldValue.cs" />
+    <Compile Include="Helper\DotNotation.cs" />
+    <Compile Include="Helper\SetFieldValue.cs" />
+    <Compile Include="Helper\AppendWhere.cs" />
+    <Compile Include="Mapper\BaseTypeMapping.cs" />
+    <Compile Include="Mapper\BindColumn.cs" />
+    <Compile Include="Mapper\BindParameter.cs" />
+    <Compile Include="Mapper\ConnectionInfo.cs" />
+    <Compile Include="Mapper\Natives.cs" />
+    <Compile Include="Mapper\NativeMapper.cs" />
+    <Compile Include="Query\QuerySetAs.cs" />
+    <Compile Include="SQLite3\Alter.cs" />
+    <Compile Include="SQLite3\Count.cs" />
+    <Compile Include="SQLite3\SelectDataTable.cs" />
+    <Compile Include="SQLite3\Schema.cs" />
+    <Compile Include="SQLite3\Select.cs" />
+    <Compile Include="SQLite3\Indexe.cs" />
+    <Compile Include="SQLite3\Delete.cs" />
+    <Compile Include="SQLite3\SelectTypedList.cs" />
+    <Compile Include="SQLite3\SQLite3.cs" />
+    <Compile Include="SQLite3\Insert.cs" />
+    <Compile Include="SQLite3\Table.cs" />
+    <Compile Include="SQLite3\TableMapping.cs" />
+    <Compile Include="SQLite3\ClassTypeMapping.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQLite3\Tests.cs" />
+    <Compile Include="SQLite3\Update.cs" />
+    <Compile Include="Structure\SQLiteColumnSchema.cs" />
+    <Compile Include="Structure\SQLiteQuery.cs" />
+    <Compile Include="Structure\SQLiteTableSchema.cs" />
+    <Compile Include="Structure\Caches.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Database\Database.csproj">
+      <Project>{1130f5e5-8156-4bfd-a777-86be50f04f0f}</Project>
+      <Name>Database</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
