@@ -2,6 +2,13 @@
 
 public partial class SQLite3 {
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="Tablename"></param>
+	/// <param name="Queries"></param>
+	/// <returns></returns>
 	public SQLiteDeleteQuery PrepareDeleteQuery<T> (string Tablename, params QueryItem [] Queries) {
 		string [] where, arg_names;
 		(where, arg_names) = SQLite3.QuerySetAsWhereStatements (Queries);

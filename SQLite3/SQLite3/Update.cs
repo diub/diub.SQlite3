@@ -52,6 +52,14 @@ public partial class SQLite3 {
 		};
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="PreparedQuery"></param>
+	/// <param name="Value"></param>
+	/// <param name="Args"></param>
+	/// <returns></returns>
 	public bool Update<T> (SQLiteUpdateQuery PreparedQuery, T Value, params object [] Args) {
 		bool status;
 		object [] values;

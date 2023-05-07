@@ -148,6 +148,11 @@ public partial class SQLite3 : IDisposable {
 		}
 	}
 
+	public string PathFilename {
+		get {
+			return path_filename;
+		}
+	}
 }   // class
 
 //	namespace	2022-09-16 - 11.00.14

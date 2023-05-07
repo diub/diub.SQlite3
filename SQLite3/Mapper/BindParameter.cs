@@ -46,20 +46,23 @@ public partial class SQLite3 {
 					return (SQLiteResult) (SQLiteResult) SQLite3Native.BindInt64 (Statement, Index, ((DateTime) Value).Ticks);
 				return (SQLiteResult) SQLite3Native.BindText (Statement, Index, ((DateTime) Value).ToString (ConnectionInfo.DateTimeStringFormat, System.Globalization.CultureInfo.InvariantCulture), -1, neg_ptr);
 			}
+			if (Value is Enum) {
+				return (SQLiteResult) SQLite3Native.BindText (Statement, Index, Value.ToString(),-1, neg_ptr);
+			}
 
-			//else if (value is DateTimeOffset) {
-			//	result = (SQLiteResult) SQLite3Native.BindInt64 (stmt, index, ((DateTimeOffset) value).UtcTicks);
-			//} else if (value is Guid) {
-			//	result = (SQLiteResult) SQLite3Native.BindText (stmt, index, ((Guid) value).ToString (), 72, NegativePointer);
-			//} else if (value is Uri) {
-			//	result = (SQLiteResult) SQLite3Native.BindText (stmt, index, ((Uri) value).ToString (), -1, NegativePointer);
-			//} else if (value is StringBuilder) {
-			//	result = (SQLiteResult) SQLite3Native.BindText (stmt, index, ((StringBuilder) value).ToString (), -1, NegativePointer);
-			//} else if (value is UriBuilder) {
-			//	result = (SQLiteResult) SQLite3Native.BindText (stmt, index, ((UriBuilder) value).ToString (), -1, NegativePointer);
-			//}
+				//else if (value is DateTimeOffset) {
+				//	result = (SQLiteResult) SQLite3Native.BindInt64 (stmt, index, ((DateTimeOffset) value).UtcTicks);
+				//} else if (value is Guid) {
+				//	result = (SQLiteResult) SQLite3Native.BindText (stmt, index, ((Guid) value).ToString (), 72, NegativePointer);
+				//} else if (value is Uri) {
+				//	result = (SQLiteResult) SQLite3Native.BindText (stmt, index, ((Uri) value).ToString (), -1, NegativePointer);
+				//} else if (value is StringBuilder) {
+				//	result = (SQLiteResult) SQLite3Native.BindText (stmt, index, ((StringBuilder) value).ToString (), -1, NegativePointer);
+				//} else if (value is UriBuilder) {
+				//	result = (SQLiteResult) SQLite3Native.BindText (stmt, index, ((UriBuilder) value).ToString (), -1, NegativePointer);
+				//}
 
-			throw new NotSupportedException ("Cannot store type: " + Value.GetType ().ToString ());
+				throw new NotSupportedException ("Cannot store type: " + Value.GetType ().ToString ());
 		}
 
 	}   // class
