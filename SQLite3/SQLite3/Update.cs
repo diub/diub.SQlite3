@@ -2,11 +2,9 @@
 
 public partial class SQLite3 {
 
-
 	//
 	// Prepare Update
 	//
-
 
 	public SQLiteUpdateQuery PrepareUpdateQuery<T> (string Tablename, params QueryItem [] Queries) {
 		string [] where, arg_names;
@@ -60,20 +58,36 @@ public partial class SQLite3 {
 	/// <param name="Value"></param>
 	/// <param name="Args"></param>
 	/// <returns></returns>
-	public bool Update<T> (SQLiteUpdateQuery PreparedQuery, T Value, params object [] Args) {
-		bool status;
+	public bool UpdateOrInsert<T> (SQLiteUpdateQuery PreparedQuery, T Value, params object [] Args) {
 		object [] values;
 		SQLiteInsertQuery sq;
 
 		values = GetValues<T> (PreparedQuery.TableMapping, Value);
-		status = mapper.ExecuteNonQuery (PreparedQuery.Query, PreparedQuery.FixedValueNames, values, PreparedQuery.FixedArgNames,
-			QuerySetAsArguments (PreparedQuery.Queries, Args));
-		if (!status)
-			return status;
+		if (!mapper.ExecuteNonQuery (PreparedQuery.Query, PreparedQuery.FixedValueNames, values, PreparedQuery.FixedArgNames,
+			QuerySetAsArguments (PreparedQuery.Queries, Args)))
+			return false;
 		if (mapper.Changes () != 0)
-			return status;
+			return true;
 		sq = PrepareInsertQuery<T> (PreparedQuery.Tablename);
 		return Insert<T> (sq, Value);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="PreparedQuery"></param>
+	/// <param name="Value"></param>
+	/// <param name="Args"></param>
+	/// <returns></returns>
+	public bool UpdateIfExist<T> (SQLiteUpdateQuery PreparedQuery, T Value, params object [] Args) {
+		object [] values;
+
+		values = GetValues<T> (PreparedQuery.TableMapping, Value);
+		if (!mapper.ExecuteNonQuery (PreparedQuery.Query, PreparedQuery.FixedValueNames, values, PreparedQuery.FixedArgNames,
+			QuerySetAsArguments (PreparedQuery.Queries, Args)))
+			return false;
+		return mapper.Changes () != 0;
 	}
 
 }   // class

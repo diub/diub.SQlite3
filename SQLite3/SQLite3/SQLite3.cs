@@ -50,18 +50,21 @@ public partial class SQLite3 : IDisposable {
 	/// <returns></returns>
 	virtual public bool Connect (SQLiteOpenFlags OpenFlags = SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite) {
 		SQLiteResult r;
-
-		lock (semaphore) {
-			if (connect_counter == 0) {
-				mapper = new NativeMapper (connection_info);
-				connection_info = new ConnectionInfo (path_filename, OpenFlags);
-				r = mapper.Open (path_filename, (int) connection_info.OpenFlags, connection_info.VfsName);
-				connected = r == SQLiteResult.OK;
+		try {
+			lock (semaphore) {
+				if (connect_counter == 0) {
+					mapper = new NativeMapper (connection_info);
+					connection_info = new ConnectionInfo (path_filename, OpenFlags);
+					r = mapper.Open (path_filename, (int) connection_info.OpenFlags, connection_info.VfsName);
+					connected = r == SQLiteResult.OK;
+				}
+				if (connected)
+					connect_counter++;
 			}
-			if (connected)
-				connect_counter++;
+			//semaphore.WaitOne ();
+		} catch (Exception) {
+			return false;
 		}
-		semaphore.WaitOne ();
 		return connected;
 	}
 
@@ -91,7 +94,7 @@ public partial class SQLite3 : IDisposable {
 				status = true;
 			}
 		}
-		semaphore.Release ();
+		//semaphore.Release ();
 		return status;
 	}
 

@@ -23,6 +23,7 @@ public partial class SQLite3 {
 			byte [] ba;
 			TypeInfo type_info;
 			TypeConverter tc;
+			Type base_type;
 
 			if (TargetType == typeof (byte [])) {
 				count = SQLite3Native.ColumnBytes (Statement, Index);
@@ -63,6 +64,12 @@ public partial class SQLite3 {
 			if (type_info.IsGenericType && type_info.GetGenericTypeDefinition () == typeof (Nullable<>)) {
 				TargetType = type_info.GenericTypeArguments [0];
 				type_info = TargetType.GetTypeInfo ();
+			}
+			base_type = type_info.BaseType;
+			if (base_type == typeof (System.Enum)) {
+				//text = Marshal.PtrToStringAnsi (SQLite3Native.ColumnText (Statement, Index));
+				text = Marshal.PtrToStringUni (SQLite3Native.ColumnText16 (Statement, Index));
+				return System.Enum.Parse (TargetType, text, true);
 			}
 
 			if (TargetType == typeof (TimeSpan)) {
