@@ -103,6 +103,12 @@ public class TableSchema<TColumnTypes> : ITableSchema<TColumnTypes> where TColum
 		}
 	}
 
+	/// <summary>
+	/// Prüft, ob die Spalten identisch sind. Die Reihenfolge im Schema ist dabei egal.
+	/// </summary>
+	/// <param name="Left"></param>
+	/// <param name="Right"></param>
+	/// <returns></returns>
 	static public bool Compare (TableSchema<TColumnTypes> Left, TableSchema<TColumnTypes> Right) {
 		ColumnSchema<TColumnTypes> right;
 
@@ -117,6 +123,32 @@ public class TableSchema<TColumnTypes> : ITableSchema<TColumnTypes> where TColum
 			// Stimmen die Spaltenschemata überein ?
 			if (!ColumnSchema<TColumnTypes>.Compare (item, right))
 				return false;
+		}
+		return true;
+	}
+
+	/// <summary>
+	/// Prüft, ob die Spalten identisch sind. Die Reihenfolge im Schema wird dabei beachtet.
+	/// </summary>
+	/// <param name="Left"></param>
+	/// <param name="Right"></param>
+	/// <returns></returns>
+	static public bool CompareWithColumnOrder (TableSchema<TColumnTypes> Left, TableSchema<TColumnTypes> Right) {
+		int i;
+		ColumnSchema<TColumnTypes> left, right;
+
+		if (Left == null)
+			return true;
+		if (Left.ColumnsCount != Right.ColumnsCount)
+			return false;
+		for (i = 0; i < Left.ColumnsCount; i++) {
+			try {
+				left = Left [i];
+				right = Right [i];
+				// Stimmen die Spaltenschemata überein ?
+				if (!ColumnSchema<TColumnTypes>.Compare (left, right))
+					return false;
+			} catch (Exception) { }
 		}
 		return true;
 	}

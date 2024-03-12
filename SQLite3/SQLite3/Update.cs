@@ -6,13 +6,13 @@ public partial class SQLite3 {
 	// Prepare Update
 	//
 
-	public SQLiteUpdateQuery PrepareUpdateQuery<T> (string Tablename, params QueryItem [] Queries) {
+	public SQLiteUpdateQuery<T> PrepareUpdateQuery<T> (string Tablename, params QueryItem [] Queries) {
 		string [] where, arg_names;
 		(where, arg_names) = SQLite3.QuerySetAsWhereStatements (Queries);
 		return PrepareUpdateQuery<T> (Queries, Tablename, where, arg_names);
 	}
 
-	private SQLiteUpdateQuery PrepareUpdateQuery<T> (QueryItem [] Queries, string Tablename, string [] WhereStatments, string [] ArgNames) {
+	private SQLiteUpdateQuery<T> PrepareUpdateQuery<T> (QueryItem [] Queries, string Tablename, string [] WhereStatments, string [] ArgNames) {
 		int i;
 		Dictionary<string, ColumnSchema<SQLiteTypes>> table_mapping;
 		StringBuilder query_builder;
@@ -42,7 +42,7 @@ public partial class SQLite3 {
 		}
 		fixed_arg_names = FixNames (ArgNames);
 		AppendWhere (query_builder, WhereStatments, ArgNames, fixed_arg_names);
-		return new SQLiteUpdateQuery () {
+		return new SQLiteUpdateQuery<T> (this) {
 			Queries = Queries,
 			Tablename = Tablename,
 			TableMapping = table_mapping, Query = query_builder.ToString (), ArgumentNames = argument_names,
@@ -58,9 +58,9 @@ public partial class SQLite3 {
 	/// <param name="Value"></param>
 	/// <param name="Args"></param>
 	/// <returns></returns>
-	public bool UpdateOrInsert<T> (SQLiteUpdateQuery PreparedQuery, T Value, params object [] Args) {
+	public bool UpdateOrInsert<T> (SQLiteUpdateQuery<T> PreparedQuery, T Value, params object [] Args) {
 		object [] values;
-		SQLiteInsertQuery sq;
+		SQLiteInsertQuery<T> sq;
 
 		values = GetValues<T> (PreparedQuery.TableMapping, Value);
 		if (!mapper.ExecuteNonQuery (PreparedQuery.Query, PreparedQuery.FixedValueNames, values, PreparedQuery.FixedArgNames,
@@ -80,7 +80,7 @@ public partial class SQLite3 {
 	/// <param name="Value"></param>
 	/// <param name="Args"></param>
 	/// <returns></returns>
-	public bool UpdateIfExist<T> (SQLiteUpdateQuery PreparedQuery, T Value, params object [] Args) {
+	public bool UpdateIfExist<T> (SQLiteUpdateQuery<T> PreparedQuery, T Value, params object [] Args) {
 		object [] values;
 
 		values = GetValues<T> (PreparedQuery.TableMapping, Value);

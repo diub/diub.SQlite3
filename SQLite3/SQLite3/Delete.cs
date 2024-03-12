@@ -23,7 +23,7 @@ public partial class SQLite3 {
 		query = new StringBuilder ("DELETE FROM ");
 		query.Append (Tablename);
 		AppendWhere (query, WhereStatments, ArgNames, fixed_arg_names);
-		return new SQLiteDeleteQuery () {
+		return new SQLiteDeleteQuery (this) {
 			Queries = Queries,
 			Tablename = Tablename, Query = query.ToString (), FixedArgNames = fixed_arg_names
 		};

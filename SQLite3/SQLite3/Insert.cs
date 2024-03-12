@@ -13,11 +13,14 @@ public partial class SQLite3 {
 	/// <param name="Value"></param>
 	/// <returns></returns>
 	public bool Insert<T> (string Tablename, T Value) {
-		SQLiteInsertQuery query;
+		SQLiteInsertQuery<T> query;
+		SQLiteQuery cached;
 
-		if (!insert_queries_cache.TryGetValue (Tablename, out query)) {
+		if (!insert_queries_cache.TryGetValue (Tablename, out cached)) {
 			query = PrepareInsertQuery<T> (Tablename);
 			insert_queries_cache.Add (Tablename, query);
+		} else {
+			query = cached as SQLiteInsertQuery<T>;
 		}
 		return Insert (query, Value);
 	}
@@ -32,7 +35,7 @@ public partial class SQLite3 {
 	/// <typeparam name="T"></typeparam>
 	/// <param name="Tablename"></param>
 	/// <returns></returns>
-	public SQLiteInsertQuery PrepareInsertQuery<T> (string Tablename) {
+	public SQLiteInsertQuery<T> PrepareInsertQuery<T> (string Tablename) {
 		Dictionary<string, ColumnSchema<SQLiteTypes>> table_mapping;
 		StringBuilder query_builder;
 		string [] argument_names, fixed_argument_names;
@@ -50,7 +53,7 @@ public partial class SQLite3 {
 		query_builder.Append (") VALUES (");
 		query_builder.Append (fixed_arg_line);
 		query_builder.Append (")");
-		return new SQLiteInsertQuery () {
+		return new SQLiteInsertQuery<T> (this) {
 			Tablename = Tablename,
 			TableMapping = table_mapping, Query = query_builder.ToString (), ArgumentNames = argument_names,
 			FixedArgNames = fixed_argument_names
@@ -64,7 +67,7 @@ public partial class SQLite3 {
 	/// <param name="PreparedQuery">Eine vorbereitete Abfrage.</param>
 	/// <param name="Value">Das zu speichernde Objekt.</param>
 	/// <returns></returns>
-	public bool Insert<T> (SQLiteInsertQuery PreparedQuery, T Value) {
+	public bool Insert<T> (SQLiteInsertQuery<T> PreparedQuery, T Value) {
 		object [] values;
 
 		values = GetValues<T> (PreparedQuery.TableMapping, Value);

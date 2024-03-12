@@ -70,7 +70,7 @@ public partial class SQLite3 {
 		query_builder.Append (fixed_arg_line);
 		query_builder.Append (")");
 
-		return new SQLiteInsertQuery () {
+		return new SQLiteInsertQuery (this) {
 			Tablename = Tablename,
 			TableMapping = table_schema.TColumns,
 			Query = query_builder.ToString (), ArgumentNames = argument_names,

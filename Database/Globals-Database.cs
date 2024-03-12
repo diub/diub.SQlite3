@@ -19,6 +19,7 @@ global using System.Globalization;
 global using System.ComponentModel.Design;
 global using System.Management;
 global using Microsoft.Win32;
+global using System.Threading;
 
 global using diub.Database;
 

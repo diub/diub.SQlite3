@@ -31,7 +31,7 @@ public partial class SQLite3 {
 	/// <summary>
 	/// Cache für mit <see cref="Insert{T}(string, T)"/> automatisch vordefinierte Insert-Abfragen.
 	/// </summary>
-	internal Dictionary<string, SQLiteInsertQuery> insert_queries_cache = new Dictionary<string, SQLiteInsertQuery> ();
+	internal Dictionary<string, SQLiteQuery> insert_queries_cache = new Dictionary<string, SQLiteQuery> ();
 
 	/// <summary>
 	/// Nach einer ALTER-Abfrage müssen die Caches geleert werden!

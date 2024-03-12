@@ -39,7 +39,7 @@ public partial class SQLite3 {
 	}
 
 
-	public SQLiteSelectQuery PrepareSelectQuery<T> (string Tablename, params QueryItem [] Queries) {
+	public SQLiteSelectQuery<T> PrepareSelectQuery<T> (string Tablename, params QueryItem [] Queries) {
 		string [] where, arg_names;
 		(where, arg_names) = SQLite3.QuerySetAsWhereStatements (Queries);
 		return PrepareSelectQuery<T> (Queries, null, Tablename, where, arg_names);
@@ -54,14 +54,14 @@ public partial class SQLite3 {
 	/// <param name="WhereStatments"></param>
 	/// <param name="ArgNames"></param>
 	/// <returns></returns>
-	private SQLiteSelectQuery PrepareSelectQuery<T> (QueryItem [] Queries, string [] GetFields, string Tablename, string [] WhereStatments = null, string [] ArgNames = null) {
+	private SQLiteSelectQuery<T> PrepareSelectQuery<T> (QueryItem [] Queries, string [] GetFields, string Tablename, string [] WhereStatments = null, string [] ArgNames = null) {
 		int i;
 		string query;
 		StringBuilder query_builder;
 		string [] fixed_arg_names;
 		Type [] target_types;
 		SQLiteTypes [] sqlite_types;
-		SQLiteSelectQuery cache_item;
+		SQLiteSelectQuery<T> cache_item;
 
 		(target_types, sqlite_types) = GetTypesFromMapping<T> (Tablename);
 		fixed_arg_names = null;
@@ -86,7 +86,7 @@ public partial class SQLite3 {
 			AppendWhere (query_builder, WhereStatments, ArgNames, fixed_arg_names);
 		}
 		query = query_builder.ToString ();
-		cache_item = new SQLiteSelectQuery () {
+		cache_item = new SQLiteSelectQuery<T> (this) {
 			Queries = Queries,
 			Tablename = Tablename,
 			Query = query, TargetTypes = target_types, SQLiteTypes = sqlite_types,
@@ -104,7 +104,7 @@ public partial class SQLite3 {
 	/// <param name="Args"></param>
 	/// <returns></returns>
 	/// <exception cref="ArgumentException"></exception>
-	public List<T> SelectList<T> (SQLiteSelectQuery PreparedQuery, params object [] Args) {
+	public List<T> SelectList<T> (SQLiteSelectQuery<T> PreparedQuery, params object [] Args) {
 		List<Dictionary<string, object>> rows;
 		T value;
 		List<T> list;
@@ -130,7 +130,7 @@ public partial class SQLite3 {
 		return list;
 	}
 
-	public T SelectOne<T> (SQLiteSelectQuery PreparedQuery, params object [] Args) {
+	public T SelectOne<T> (SQLiteSelectQuery<T> PreparedQuery, params object [] Args) {
 		List<T> list;
 
 		list = SelectList<T> (PreparedQuery, Args);

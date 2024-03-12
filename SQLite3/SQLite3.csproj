@@ -68,6 +68,7 @@
     <Compile Include="Mapper\ConnectionInfo.cs" />
     <Compile Include="Mapper\Natives.cs" />
     <Compile Include="Mapper\NativeMapper.cs" />
+    <Compile Include="Query\InsertQueries.cs" />
     <Compile Include="Query\QuerySetAs.cs" />
     <Compile Include="SQLite3\Alter.cs" />
     <Compile Include="SQLite3\Count.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="SQLite3\Tests.cs" />
     <Compile Include="SQLite3\Update.cs" />
     <Compile Include="Structure\SQLiteColumnSchema.cs" />
-    <Compile Include="Structure\SQLiteQuery.cs" />
+    <Compile Include="Query\SQLiteQuery.cs" />
     <Compile Include="Structure\SQLiteTableSchema.cs" />
     <Compile Include="Structure\Caches.cs" />
   </ItemGroup>

@@ -36,9 +36,9 @@ public partial class SQLite3 {
 		TESTCLASS test;
 		SUPERCLASS super;
 		BRACKENCLASS bracken;
-		SQLiteSelectQuery select_query;
-		SQLiteInsertQuery insert_query;
-		SQLiteUpdateQuery update_query;
+		SQLiteSelectQuery<SUPERCLASS> select_query;
+		SQLiteInsertQuery<BRACKENCLASS> insert_query;
+		SQLiteUpdateQuery<SUPERCLASS> update_query;
 
 		System.IO.File.Delete (PATH_FILENAME);
 
@@ -70,7 +70,7 @@ public partial class SQLite3 {
 		var l3 = sqlite.SelectList<SUPERCLASS> (select_query, 100);
 
 		//var l4 = sqlite.SelectListWhere<BRACKENCLASS> (TABLENAME);
-		
+
 		//sqlite.Remove (TABLENAME , "=", "SuperCount", 100);
 		//sqlite.Remove (TABLENAME , "=", "testclass.count", 1);
 

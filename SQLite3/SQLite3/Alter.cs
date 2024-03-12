@@ -2,6 +2,10 @@
 
 public partial class SQLite3 {
 
+	//public bool AddColumn (string Tablename, Type CSType) {
+	//	return AddColumn (Tablename, nameof (CSType), CSType);
+	//}
+
 	public bool AddColumn (string Tablename, string Columnname, Type CSType) {
 		StringBuilder sb;
 		string type;
@@ -19,7 +23,7 @@ public partial class SQLite3 {
 
 	public bool DropColumn (string Tablename, string Columnname) {
 		StringBuilder sb;
-		
+
 		sb = new StringBuilder ();
 		sb.Append ("ALTER TABLE ");
 		sb.Append (Tablename);

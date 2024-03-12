@@ -36,7 +36,7 @@ public partial class SQLite3 {
 			fixed_arg_names = FixNames (ArgNames);
 			AppendWhere (query, WhereStatments, ArgNames, fixed_arg_names);
 		}
-		return new SQLiteCountQuery () { Tablename = Tablename, Query = query.ToString (), FixedArgNames = fixed_arg_names };
+		return new SQLiteCountQuery (this) { Tablename = Tablename, Query = query.ToString (), FixedArgNames = fixed_arg_names };
 	}
 
 	public int Count (SQLiteCountQuery PreparedQuery, params object [] Args) {
