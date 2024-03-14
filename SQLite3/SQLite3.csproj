@@ -54,6 +54,7 @@
     <Compile Include="Firm\SQLiteResult.cs" />
     <Compile Include="Firm\SQLiteTypeClasses.cs" />
     <Compile Include="Firm\SQLiteTypes.cs" />
+    <Compile Include="Firm\TransactionModes.cs" />
     <Compile Include="Globals-SQLite3.cs" />
     <Compile Include="Helper\CompareSchema.cs" />
     <Compile Include="Helper\Creator.cs" />
@@ -84,7 +85,8 @@
     <Compile Include="SQLite3\TableMapping.cs" />
     <Compile Include="SQLite3\ClassTypeMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLite3\Tests.cs" />
+    <Compile Include="Tests\Concurrent.cs" />
+    <Compile Include="Tests\Standard.cs" />
     <Compile Include="SQLite3\Update.cs" />
     <Compile Include="Structure\SQLiteColumnSchema.cs" />
     <Compile Include="Query\SQLiteQuery.cs" />

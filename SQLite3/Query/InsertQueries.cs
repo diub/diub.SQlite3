@@ -2,12 +2,12 @@
 
 public partial class SQLite3 {
 
-	public class SQLiteInsertQuery : SQLiteQuery {
-		public SQLiteInsertQuery (SQLite3 CreatorDatabase) : base (CreatorDatabase) {
+	public class SQLiteInsertRowQuery : SQLiteQuery {
+		public SQLiteInsertRowQuery (SQLite3 CreatorDatabase) : base (CreatorDatabase) {
 		}
 
 		public bool Insert (DataRow Row) {
-			return Database.Insert (this, Row);
+			return Database.InsertRow (this, Row);
 		}
 	}   // class
 

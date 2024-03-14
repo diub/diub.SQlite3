@@ -22,6 +22,21 @@ public partial class SQLite3 : IDisposable {
 	/// </summary>
 	protected Semaphore semaphore = new Semaphore (1, 1);
 
+	/// <summary>
+	/// Transaktionen Exlusiv ausführen oder zusammenfassen.
+	/// </summary>
+	public TransactionModes TransactionMode = TransactionModes.Default;
+
+	/// <summary>
+	/// Dient zur Sicherung des exklusiven Zugriffs bei <see cref="TransactionModes.Exclusive"/>.
+	/// </summary>
+	private Mutex transaction_mutex = new Mutex (false);
+
+	/// <summary>
+	/// Dient zum Hoch- und Runterzählen der Freigaben bei <see cref="TransactionModes.SpeedCombine"/>.
+	/// </summary>
+	private int transaction_combine_counter = 0;
+
 	public SQLite3 (string PathFilename) {
 		path_filename = PathFilename;
 		//connection_info = new ConnectionInfo (path_filename);
@@ -119,22 +134,54 @@ public partial class SQLite3 : IDisposable {
 	public bool BeginTransaction () {
 		string query;
 
-		query = "BEGIN DEFERRED";
-		query += " TRANSACTION";
-		return mapper.ExecuteNonQuery (query);
+		if (TransactionMode == TransactionModes.Exclusive) {
+			transaction_mutex.WaitOne ();
+			query = "BEGIN DEFERRED";
+			query += " TRANSACTION";
+			return mapper.ExecuteNonQuery (query);
+		} else {
+			lock (transaction_mutex) {
+				transaction_combine_counter++;
+				// Bestehende Transaktion mitbenutzen.
+				if (transaction_combine_counter != 1)
+					return true;
+				// Neue Transaktion öffnen.
+				query = "BEGIN DEFERRED";
+				query += " TRANSACTION";
+				return mapper.ExecuteNonQuery (query);
+			}
+		}
 	}
+
 
 	public bool Commit () {
 		string query;
 
-		query = "COMMIT";
-		query += " TRANSACTION";
-		return mapper.ExecuteNonQuery (query);
+		if (TransactionMode == TransactionModes.Exclusive) {
+			try {
+				query = "COMMIT";
+				query += " TRANSACTION";
+				return mapper.ExecuteNonQuery (query);
+			} finally {
+				transaction_mutex.ReleaseMutex ();
+			}
+		} else {
+			lock (transaction_mutex) {
+				transaction_combine_counter--;
+				if (transaction_combine_counter != 0)
+					return true;
+				query = "COMMIT";
+				query += " TRANSACTION";
+				return mapper.ExecuteNonQuery (query);
+			}
+		}
 	}
 
 	public bool Rollback () {
 		string query;
 
+		if (TransactionMode != TransactionModes.Exclusive)
+			throw new Exception ("SQLite3: transaction mode has to be " + nameof (TransactionModes.Exclusive));
 		query = "ROLLBACK";
 		query += " TRANSACTION";
 		return mapper.ExecuteNonQuery (query);

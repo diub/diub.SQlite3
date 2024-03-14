@@ -9,10 +9,10 @@ public partial class SQLite3 {
 	/// <param name="Row"></param>
 	/// <returns></returns>
 	public bool InsertDataRow (string Tablename, DataRow Row) {
-		SQLiteInsertQuery query;
+		SQLiteInsertRowQuery query;
 
 		query = PrepareInsertQuery (Tablename, Row.Table);
-		return Insert (query, Row);
+		return InsertRow (query, Row);
 	}
 
 	/// <summary>
@@ -23,13 +23,13 @@ public partial class SQLite3 {
 	/// <returns></returns>
 	public bool InsertDataTable (string Tablename, DataTable Table) {
 		bool status;
-		SQLiteInsertQuery query;
+		SQLiteInsertRowQuery query;
 
 		status = true;
 		query = PrepareInsertQuery (Tablename, Table);
 		BeginTransaction ();
 		foreach (DataRow row in Table.Rows)
-			status = status && Insert (query, row);
+			status = status && InsertRow (query, row);
 		Commit ();
 		return status;
 	}
@@ -40,7 +40,7 @@ public partial class SQLite3 {
 	/// <param name="Tablename"></param>
 	/// <param name="Row"></param>
 	/// <returns></returns>
-	public SQLiteInsertQuery PrepareInsertQuery (string Tablename, DataTable Table) {
+	public SQLiteInsertRowQuery PrepareInsertQuery (string Tablename, DataTable Table) {
 		int i;
 		string fixed_query, fixed_arg_line;
 		StringBuilder query_builder;
@@ -70,7 +70,7 @@ public partial class SQLite3 {
 		query_builder.Append (fixed_arg_line);
 		query_builder.Append (")");
 
-		return new SQLiteInsertQuery (this) {
+		return new SQLiteInsertRowQuery (this) {
 			Tablename = Tablename,
 			TableMapping = table_schema.TColumns,
 			Query = query_builder.ToString (), ArgumentNames = argument_names,
@@ -78,7 +78,7 @@ public partial class SQLite3 {
 		};
 	}
 
-	public bool Insert (SQLiteInsertQuery PreparedQuery, DataRow Row) {
+	public bool InsertRow (SQLiteInsertRowQuery PreparedQuery, DataRow Row) {
 		int i;
 		object [] values;
 
